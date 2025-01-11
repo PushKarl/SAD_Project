@@ -8,10 +8,18 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
-        // Liste von Flipperelementen
-        List<FlipperElement> elements = new ArrayList<>();
+        // Flipperelemente
         Slingshot slingshot = new Slingshot();
+        Target target = new Target();
+
+        // Befehle
+        SlingshotHitCommand slingshotCommand = new SlingshotHitCommand(slingshot);
+        TargetHitCommand targetCommand = new TargetHitCommand(target);
+
+        // Liste der Flipperelemente
+        List<FlipperElement> elements = new ArrayList<>();
         elements.add(slingshot);
+        elements.add(target);
 
         System.out.println("Willkommen zum Flipperautomaten!");
         while (running) {
@@ -20,8 +28,9 @@ public class Main {
             System.out.println("2: Startknopf drücken");
             System.out.println("3: Kugel verlieren");
             System.out.println("4: Slingshot treffen");
-            System.out.println("5: Punkte berechnen");
-            System.out.println("6: Elemente zurücksetzen");
+            System.out.println("5: Target treffen");
+            System.out.println("6: Punkte berechnen");
+            System.out.println("7: Elemente zurücksetzen");
             System.out.println("0: Programm beenden");
 
             System.out.print("Eingabe: ");
@@ -38,16 +47,19 @@ public class Main {
                     automat.kugelVerlieren();
                     break;
                 case "4":
-                    slingshot.hit();
+                    slingshotCommand.execute();
                     break;
                 case "5":
+                    targetCommand.execute();
+                    break;
+                case "6":
                     PunkteVisitor punkteVisitor = new PunkteVisitor();
                     for (FlipperElement element : elements) {
                         element.accept(punkteVisitor);
                     }
                     System.out.println("Gesamtpunkte: " + punkteVisitor.getTotalScore());
                     break;
-                case "6":
+                case "7":
                     ResetVisitor resetVisitor = new ResetVisitor();
                     for (FlipperElement element : elements) {
                         element.accept(resetVisitor);
@@ -66,3 +78,4 @@ public class Main {
         scanner.close();
     }
 }
+

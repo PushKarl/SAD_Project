@@ -7,6 +7,12 @@ public class PunkteVisitor extends FlipperElementVisitor {
         System.out.println("Punkte von Slingshot: " + (slingshot.getHits() * 100));
     }
 
+    @Override
+    public void visit(Target target) {
+        if (target.isHit()) {
+            totalScore += 200; // Punkte für ein getroffenes Target
+        }
+    }
     public int getTotalScore() {
         return totalScore;
     }
