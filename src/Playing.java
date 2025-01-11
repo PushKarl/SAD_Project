@@ -1,6 +1,6 @@
-
 public class Playing implements Zustand {
     private int kugelnVerloren = 0;
+    private int maxBälle = 3; // Maximale Anzahl von Bällen pro Münze
 
     @Override
     public void muenzeEinwerfen(Flipperautomat automat) {
@@ -9,16 +9,24 @@ public class Playing implements Zustand {
 
     @Override
     public void startKnopfDrucken(Flipperautomat automat) {
-        System.out.println("Entwickler: Software-Autoren! Das Spiel läuft bereits.");
+        System.out.println("Entwickler: Marina, Tamara & Ricarda! Das Spiel läuft bereits.");
     }
 
     @Override
     public void kugelVerlieren(Flipperautomat automat) {
         kugelnVerloren++;
         System.out.println("Kugel verloren. Verlorene Kugeln: " + kugelnVerloren);
-        if (kugelnVerloren == 3) {
-            System.out.println("Drei Kugeln verloren. Wechsel zu EndState.");
+
+        // Überprüfen, ob alle Bälle verloren sind
+        if (kugelnVerloren >= maxBälle) {
+            // ASCII-Ausgabe für Spielende
+            TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
+            System.out.println(asciiStyle.format("GAME OVER!"));
             automat.setZustand(new EndState());
+        } else {
+            // ASCII-Ausgabe für verbleibende Bälle
+            TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
+            System.out.println(asciiStyle.format("Verbleibende Bälle: " + (maxBälle - kugelnVerloren)));
         }
     }
 }

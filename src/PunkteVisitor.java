@@ -13,6 +13,13 @@ public class PunkteVisitor extends FlipperElementVisitor {
             totalScore += 200; // Punkte für ein getroffenes Target
         }
     }
+
+    @Override
+    public void visit(Bumper bumper) {
+        totalScore += bumper.getPoints();
+        System.out.println("Punkte von Bumper: " + bumper.getPoints());
+    }
+
     public int getTotalScore() {
         return totalScore;
     }

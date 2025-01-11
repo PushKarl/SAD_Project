@@ -10,4 +10,10 @@ public class ResetVisitor extends FlipperElementVisitor {
         target.reset(); // Setzt das Target zurück
         System.out.println("Target zurückgesetzt.");
     }
+
+    @Override
+    public void visit(Bumper bumper) {
+        bumper.reset(); // Setzt das Target zurück
+        System.out.println("Bumper zurückgesetzt.");
+    }
 }

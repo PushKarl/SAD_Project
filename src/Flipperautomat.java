@@ -1,4 +1,4 @@
-
+import java.util.Random;
 public class Flipperautomat {
     private Zustand aktuellerZustand;
 
@@ -19,6 +19,15 @@ public class Flipperautomat {
     }
 
     public void kugelVerlieren() {
-        aktuellerZustand.kugelVerlieren(this);
+        Random random = new Random();
+        if (random.nextInt(10) < 3) { // 30% Wahrscheinlichkeit, dass die Kugel unerwartet verloren geht
+            System.out.println("Die Kugel ist unerwartet verloren gegangen!");
+            // ASCII-Ausgabe für unerwarteten Verlust
+            TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
+            System.out.println(asciiStyle.format("Unvorhergesehener Verlust!"));
+            aktuellerZustand.kugelVerlieren(this);
+        } else {
+            aktuellerZustand.kugelVerlieren(this);
+        }
     }
 }
