@@ -10,7 +10,7 @@ Erfinden sie ein Szenario nach ihrer Fantasie!
 
 ## Zustand
 - Der Flipper befindet sich anfangs im <mark>NoCredit-Zustand</mark>. Nach Einwurf einer Münze wechselt dieser in den <mark>Ready-Zustand</mark> und bleibt dort, bis der <mark>Start-Knopf</mark> gedrückt wird.
-- Der <mark>Start-Knopf</mark> versetzt den Automaten in den <mark>Playing-Zustand<7mark>. Zu jedem Zeitpunkt können weitere Münzen eingeworfen werden, welche den Kredit erhöhen.
+- Der <mark>Start-Knopf</mark> versetzt den Automaten in den <mark>Playing-Zustand</mark>. Zu jedem Zeitpunkt können weitere Münzen eingeworfen werden, welche den Kredit erhöhen.
 - Wird der <mark>Start-Knopf im NoCredit-Zustand gedrückt</mark>, so erscheint eine Meldung, dass <mark>kein Kredit</mark> vorhanden ist.
 - Wird der <mark>Start-Knopf während des Playing-Zustandes gedrückt</mark>, so erscheinen die <mark>Autoren der Software</mark>.
 - Ist eine <mark>Kugel 3-mal verloren gegangen</mark>, so wechseln sie in den <mark>End State</mark>, bei welchem sie ein Spiel gewinnen können. Danach wechselt der Automat, je nach Kredit, in den No-Credit- bzw. Ready-Zustand.
