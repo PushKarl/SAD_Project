@@ -6,11 +6,14 @@ import main.Flipperautomat;
 
 public class Playing implements Zustand {
     private int kugelnVerloren = 0;
-    private int maxBälle = 3; // Maximale Anzahl von Bällen pro Münze
+    private final int maxBälle = 3; // Maximale Anzahl von Bällen pro Münze
 
+    public int getAktuellerBall() {
+        return kugelnVerloren + 1; // Aktueller Ball ist verlorene Kugeln + 1
+    }
     @Override
     public void muenzeEinwerfen(Flipperautomat automat) {
-        System.out.println("Münze eingeworfen. Kredit erhöht.");
+
     }
 
     @Override
@@ -27,7 +30,7 @@ public class Playing implements Zustand {
         if (kugelnVerloren >= maxBälle) {
             // ASCII-Ausgabe für Spielende
             TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
-            System.out.println(asciiStyle.format("GAME OVER!"));
+            System.out.println(asciiStyle.format("GAME OVER! NEUE MÜNZE EINWERFEN!"));
             automat.setZustand(new EndState());
         } else {
             // ASCII-Ausgabe für verbleibende Bälle

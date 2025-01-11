@@ -11,8 +11,6 @@ import elemente.Slingshot;
 import elemente.Target;
 import visitor.PunkteVisitor;
 import visitor.ResetVisitor;
-import zustand.NoCredit;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +30,9 @@ public class Main {
         Bumper bumper = new Bumper();
 
         // Befehle
-        SlingshotHitCommand slingshotCommand = new SlingshotHitCommand(slingshot);
-        TargetHitCommand targetCommand = new TargetHitCommand(target);
-        BumperHitCommand bumperCommand = new BumperHitCommand(bumper);
+        SlingshotHitCommand slingshotCommand = new SlingshotHitCommand(slingshot, automat);
+        TargetHitCommand targetCommand = new TargetHitCommand(target, automat);
+        BumperHitCommand bumperCommand = new BumperHitCommand(bumper, automat);
 
         // Liste der Flipperelemente
         List<FlipperElement> elements = new ArrayList<>();
@@ -48,9 +46,9 @@ public class Main {
             System.out.println("1: Münze einwerfen");
             System.out.println("2: Startknopf drücken");
             System.out.println("3: Kugel verlieren");
-            System.out.println("4: elemente.Slingshot treffen");
-            System.out.println("5: elemente.Target treffen");
-            System.out.println("6: elemente.Bumper treffen");
+            System.out.println("4: Slingshot treffen");
+            System.out.println("5: Target treffen");
+            System.out.println("6: Bumper treffen");
             System.out.println("7: Punkte berechnen");
             System.out.println("8: Elemente zurücksetzen");
             System.out.println("9: Spielstatus anzeigen (ASCII-Ausgabe)");
@@ -96,13 +94,23 @@ public class Main {
                     break;
 
                 case "9":
-                    TextStyle style = TextStyleFactory.getStyle(currentStyle);
-                    System.out.println(style.format("Aktueller Spielstatus: Spiel läuft!"));
+                    if (automat.getAktuellerZustand() instanceof zustand.Ready) {
+                        TextStyle styleReady = TextStyleFactory.getStyle(currentStyle);
+                        System.out.println(styleReady.format("Press Start"));
+                    } else if (automat.getAktuellerZustand() instanceof zustand.Playing) {
+                        TextStyle stylePlaying = TextStyleFactory.getStyle(currentStyle);
+                        System.out.println(stylePlaying.format("BALL " + automat.getAktuellerBall()));
+                    } else if (automat.getAktuellerZustand() instanceof zustand.EndState) {
+                        TextStyle styleEnd = TextStyleFactory.getStyle(currentStyle);
+                        System.out.println(styleEnd.format("GAME OVER"));
+                    } else {
+                        System.out.println("Unbekannter Spielstatus.");
+                    }
                     break;
 
                 case "10":
-                    TextStyle asciiStyleGameOver = TextStyleFactory.getStyle("ASCII");
-                    System.out.println(asciiStyleGameOver.format("GAME OVER"));
+                    TextStyle styleGameOver = TextStyleFactory.getStyle(currentStyle);
+                    System.out.println(styleGameOver.format("GAME OVER"));
                     running = false;
                     break;
 
