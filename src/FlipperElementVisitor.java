@@ -1,6 +1,4 @@
-
-public class FlipperElementVisitor {
-    public void visit(Slingshot slingshot) {
-        System.out.println("Besuche Slingshot.");
-    }
+public abstract class FlipperElementVisitor {
+    public abstract void visit(Slingshot slingshot);
+    // Weitere Flipperelemente können hier ergänzt werden
 }
