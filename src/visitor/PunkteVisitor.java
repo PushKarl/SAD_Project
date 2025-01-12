@@ -17,10 +17,9 @@ public class PunkteVisitor extends FlipperElementVisitor {
 
     @Override
     public void visit(Target target) {
-        if (target.isHit()) {
-            totalScore += 200; // Punkte für ein getroffenes Target
-            System.out.println("Punkte von Target: " + (target.isHit()));
-        }
+        int pointsForTarget = target.getHits() * 200; // 200 Punkte pro Treffer
+        totalScore += pointsForTarget;
+        System.out.println("Punkte von Target: " + pointsForTarget);
     }
     @Override
     public void visit(Bumper bumper) {
