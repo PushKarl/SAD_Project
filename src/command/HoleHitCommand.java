@@ -1,16 +1,15 @@
 package command;
 
-import command.Command;
-import elemente.Slingshot;
+import elemente.Hole;
 import main.Flipperautomat;
 import zustand.EndState;
 
-public class SlingshotHitCommand implements Command {
-    private Slingshot slingshot;
+public class HoleHitCommand implements Command {
+    private Hole hole;
     private Flipperautomat automat;
 
-    public SlingshotHitCommand(Slingshot slingshot, Flipperautomat automat) {
-        this.slingshot = slingshot;
+    public HoleHitCommand(Hole hole, Flipperautomat automat) {
+        this.hole = hole;
         this.automat = automat;
     }
 
@@ -20,7 +19,6 @@ public class SlingshotHitCommand implements Command {
             System.out.println("Aktion nicht möglich: Das Spiel ist vorbei. Bitte werfen Sie eine neue Münze ein.");
             return;
         }
-        slingshot.hit();
-        System.out.println("Punkte wurden vergeben.");
+        hole.hit(); // Ruft die Logik für das Hole auf
     }
 }

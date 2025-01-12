@@ -13,7 +13,7 @@ public class Bumper extends FlipperElement {
         Random random = new Random();
         int pointsAwarded = random.nextInt(101) + 50; // Zufällige Punkte zwischen 50 und 150
         points += pointsAwarded;
-        System.out.println("elemente.Bumper getroffen! Punkte: " + pointsAwarded);
+        System.out.println("Bumper getroffen! Punkte: " + pointsAwarded);
 
         // Spezieller Effekt bei jedem 5. Treffer
         if (hits % 5 == 0) {
@@ -25,7 +25,7 @@ public class Bumper extends FlipperElement {
     public void reset() {
         hits = 0;
         points = 0;
-        System.out.println("elemente.Bumper wurde zurückgesetzt.");
+        System.out.println("Bumper wurde zurückgesetzt.");
     }
 
     public int getPoints() {

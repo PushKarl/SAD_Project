@@ -8,7 +8,13 @@ public class Slingshot extends FlipperElement {
 
     public void hit() {
         hits++;
-        System.out.println("elemente.Slingshot getroffen! Trefferanzahl: " + hits);
+        System.out.println("Slingshot getroffen! Trefferanzahl: " + hits);
+    }
+
+    @Override
+    public void reset() {
+        hits = 0; // Treffer werden zurückgesetzt
+        System.out.println("Slingshot zurückgesetzt.");
     }
 
     public int getHits() {

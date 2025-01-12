@@ -1,14 +1,9 @@
 package main;
 
-import command.BumperHitCommand;
-import command.SlingshotHitCommand;
-import command.TargetHitCommand;
+import command.*;
 import display.TextStyle;
 import display.TextStyleFactory;
-import elemente.Bumper;
-import elemente.FlipperElement;
-import elemente.Slingshot;
-import elemente.Target;
+import elemente.*;
 import visitor.PunkteVisitor;
 import visitor.ResetVisitor;
 
@@ -28,17 +23,28 @@ public class Main {
         Slingshot slingshot = new Slingshot();
         Target target = new Target();
         Bumper bumper = new Bumper();
+        Hole hole = new Hole();
 
         // Befehle
         SlingshotHitCommand slingshotCommand = new SlingshotHitCommand(slingshot, automat);
         TargetHitCommand targetCommand = new TargetHitCommand(target, automat);
         BumperHitCommand bumperCommand = new BumperHitCommand(bumper, automat);
+        HoleHitCommand holeCommand = new HoleHitCommand(hole, automat);
+        ZahlenRatenCommand zahlenRatenCommand = new ZahlenRatenCommand();
+        RampeAktivierenCommand rampeCommand = new RampeAktivierenCommand();
+
+        //Makrobefehl
+        MacroCommand holeMacro = new MacroCommand();
+        holeMacro.addCommand(holeCommand);
+        holeMacro.addCommand(zahlenRatenCommand);
+        holeMacro.addCommand(rampeCommand);
 
         // Liste der Flipperelemente
         List<FlipperElement> elements = new ArrayList<>();
         elements.add(slingshot);
         elements.add(target);
         elements.add(bumper);
+        elements.add(hole);
 
         System.out.println("Willkommen zum Flipperautomaten!");
         while (running) {
@@ -49,11 +55,12 @@ public class Main {
             System.out.println("4: Slingshot treffen");
             System.out.println("5: Target treffen");
             System.out.println("6: Bumper treffen");
-            System.out.println("7: Punkte berechnen");
-            System.out.println("8: Elemente zurücksetzen");
-            System.out.println("9: Spielstatus anzeigen (ASCII-Ausgabe)");
-            System.out.println("10: Spiel beenden (ASCII-Ausgabe)");
-            System.out.println("11: Schriftstil ändern");
+            System.out.println("7: Hole treffen");
+            System.out.println("8: Punkte berechnen");
+            System.out.println("9: Elemente zurücksetzen");
+            System.out.println("10: Spielstatus anzeigen (ASCII-Ausgabe)");
+            System.out.println("11: Spiel beenden (ASCII-Ausgabe)");
+            System.out.println("12: Schriftstil ändern");
             System.out.println("0: Programm beenden");
 
             System.out.print("Eingabe: ");
@@ -79,13 +86,17 @@ public class Main {
                     bumperCommand.execute();
                     break;
                 case "7":
+                    holeMacro.execute(); // Führt alle Aktionen des Holes aus
+                    hole.hit();
+                    break;
+                case "8":
                     PunkteVisitor punkteVisitor = new PunkteVisitor();
                     for (FlipperElement element : elements) {
                         element.accept(punkteVisitor);
                     }
                     System.out.println("Gesamtpunkte: " + punkteVisitor.getTotalScore());
                     break;
-                case "8":
+                case "9":
                     ResetVisitor resetVisitor = new ResetVisitor();
                     for (FlipperElement element : elements) {
                         element.accept(resetVisitor);
@@ -93,7 +104,7 @@ public class Main {
                     System.out.println("Alle Elemente zurückgesetzt.");
                     break;
 
-                case "9":
+                case "10":
                     if (automat.getAktuellerZustand() instanceof zustand.Ready) {
                         TextStyle styleReady = TextStyleFactory.getStyle(currentStyle);
                         System.out.println(styleReady.format("Press Start"));
@@ -108,13 +119,13 @@ public class Main {
                     }
                     break;
 
-                case "10":
+                case "11":
                     TextStyle styleGameOver = TextStyleFactory.getStyle(currentStyle);
                     System.out.println(styleGameOver.format("GAME OVER"));
                     running = false;
                     break;
 
-                case "11":
+                case "12":
                     System.out.println("Wählen Sie einen Schriftstil: Block oder Slant");
                     currentStyle = scanner.nextLine();
                     System.out.println("Schriftstil geändert zu: " + currentStyle);

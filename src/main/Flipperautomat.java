@@ -58,7 +58,7 @@ public class Flipperautomat {
         if (random.nextInt(10) < 3) {
             System.out.println("Die Kugel ist unerwartet verloren gegangen!");
             TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
-            System.out.println(asciiStyle.format("Unvorhergesehener Verlust!"));
+            System.out.println(asciiStyle.format("RANDOM Verlust!"));
         }
         aktuellerZustand.kugelVerlieren(this);
     }

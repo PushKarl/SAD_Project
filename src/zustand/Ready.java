@@ -10,7 +10,7 @@ public class Ready implements Zustand {
 
     @Override
     public void startKnopfDrucken(Flipperautomat automat) {
-        System.out.println("Spiel startet. Wechsel zu zustand.Playing-zustand.Zustand.");
+        System.out.println("Spiel startet. Wechsel zu Playing-Zustand.");
         automat.setZustand(new Playing());
     }
 

@@ -7,7 +7,7 @@ import zustand.Zustand;
 public class NoCredit implements Zustand {
     @Override
     public void muenzeEinwerfen(Flipperautomat automat) {
-        System.out.println("Münze eingeworfen. Wechsel zu zustand.Ready-zustand.Zustand.");
+        System.out.println("Wechsel zu Ready-Zustand.");
         automat.setZustand(new Ready());
     }
 

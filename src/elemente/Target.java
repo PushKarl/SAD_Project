@@ -3,21 +3,27 @@ package elemente;
 import elemente.FlipperElement;
 import visitor.FlipperElementVisitor;
 
+import java.util.Random;
+
 public class Target extends FlipperElement {
     private boolean isHit = false;
+    private int hits = 0;
 
     public void hit() {
-        if (!isHit) {
+        Random random = new Random();
+        if (random.nextBoolean()) {
             isHit = true;
-            System.out.println("elemente.Target getroffen! Punkte erhalten.");
+            hits++;
+            System.out.println("Target wurde getroffen! Treffer: " + hits);
         } else {
-            System.out.println("elemente.Target wurde bereits getroffen.");
+            System.out.println("Target wurde nicht getroffen.");
         }
     }
 
     public void reset() {
         isHit = false;
-        System.out.println("elemente.Target zurückgesetzt.");
+        hits = 0;
+        System.out.println("Target zurückgesetzt.");
     }
 
     @Override
@@ -28,4 +34,8 @@ public class Target extends FlipperElement {
     public boolean isHit() {
         return isHit;
     }
+
+    public int getHits() {
+      return hits;
+    };
 }
