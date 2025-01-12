@@ -1,5 +1,7 @@
 package zustand;
 
+import display.TextStyle;
+import display.TextStyleFactory;
 import main.Flipperautomat;
 
 import zustand.Zustand;
@@ -9,6 +11,7 @@ public class NoCredit implements Zustand {
     public void muenzeEinwerfen(Flipperautomat automat) {
         System.out.println("Wechsel zu Ready-Zustand.");
         automat.setZustand(new Ready());
+        System.out.println("PRESS START");
     }
 
     @Override

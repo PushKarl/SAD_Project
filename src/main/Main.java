@@ -46,7 +46,17 @@ public class Main {
         elements.add(bumper);
         elements.add(hole);
 
-        System.out.println("Willkommen zum Flipperautomaten!");
+        System.out.println("""
+                Willkommen zum
+                 ________ ___       ___  ________  ________  _______   ________    \s
+                |\\  _____\\\\  \\     |\\  \\|\\   __  \\|\\   __  \\|\\  ___ \\ |\\   __  \\   \s
+                \\ \\  \\__/\\ \\  \\    \\ \\  \\ \\  \\|\\  \\ \\  \\|\\  \\ \\   __/|\\ \\  \\|\\  \\  \s
+                 \\ \\   __\\\\ \\  \\    \\ \\  \\ \\   ____\\ \\   ____\\ \\  \\_|/_\\ \\   _  _\\ \s
+                  \\ \\  \\_| \\ \\  \\____\\ \\  \\ \\  \\___|\\ \\  \\___|\\ \\  \\_|\\ \\ \\  \\\\  \\|\s
+                   \\ \\__\\   \\ \\_______\\ \\__\\ \\__\\    \\ \\__\\    \\ \\_______\\ \\__\\\\ _\\\s
+                    \\|__|    \\|_______|\\|__|\\|__|     \\|__|     \\|_______|\\|__|\\|__|
+                
+                """);
         while (running) {
             System.out.println("\nWählen Sie eine Aktion:");
             System.out.println("1: Münze einwerfen");
@@ -127,8 +137,8 @@ public class Main {
 
                 case "12":
                     System.out.println("Wählen Sie einen Schriftstil: Block oder Slant");
-                    currentStyle = scanner.nextLine();
-                    System.out.println("Schriftstil geändert zu: " + currentStyle);
+                    String style = scanner.nextLine();
+                    System.out.println("Schriftstil geändert zu: " + style);
                     break;
 
                 case "0":

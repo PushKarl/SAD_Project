@@ -13,9 +13,7 @@ public class Playing implements Zustand {
     }
     @Override
     public void muenzeEinwerfen(Flipperautomat automat) {
-
     }
-
     @Override
     public void startKnopfDrucken(Flipperautomat automat) {
         System.out.println("Entwickler: Marina, Tamara & Ricarda! Das Spiel läuft bereits.");
