@@ -12,8 +12,10 @@ import java.util.Random;
 public class Flipperautomat {
     private Zustand aktuellerZustand;
     private int kredit = 0;
-
+    private int totalPoints = 0;
     private Thread kugelVerlustThread;
+    private String currentStyle = "Block";
+
 
     public Flipperautomat() {
         this.aktuellerZustand = new NoCredit();
@@ -41,11 +43,15 @@ public class Flipperautomat {
     public void muenzeEinwerfen() {
         kredit++;
         System.out.println("Münze eingeworfen. Aktueller Kredit: " + kredit);
+
+        // Wechsel von EndState zu Ready
         if (aktuellerZustand instanceof EndState) {
             setZustand(new Ready());
             System.out.println("Wechsel in den Ready-Zustand. Drei neue Bälle bereit.");
+        } else {
+            // Übergibt die Logik an den aktuellen Zustand
+            aktuellerZustand.muenzeEinwerfen(this);
         }
-        aktuellerZustand.muenzeEinwerfen(this);
     }
 
     public void startKnopfDrucken() {
@@ -60,14 +66,7 @@ public class Flipperautomat {
         if (aktuellerZustand instanceof zustand.EndState) {
             System.out.println("Keine Kugeln mehr. Bitte werfen Sie eine Münze ein.");
             return;
-        }
-        Random random = new Random();
-        if (random.nextInt(10) < 3) {
-            System.out.println("Die Kugel ist unerwartet verloren gegangen!");
-            TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
-            System.out.println(asciiStyle.format("RANDOM Verlust!"));
-        }
-        aktuellerZustand.kugelVerlieren(this);
+        } aktuellerZustand.kugelVerlieren(this);
     }
     public int getKredit() {
         return kredit;
@@ -77,6 +76,13 @@ public class Flipperautomat {
         if (kredit > 0) {
             kredit--;
         }
+    }
+    public void addPoints(int points) {
+        totalPoints += points; // Punkte zum Gesamtspielstand hinzufügen
+    }
+
+    public int getTotalPoints() {
+        return totalPoints;
     }
 
     public void startKugelVerlustThread() {
@@ -90,7 +96,7 @@ public class Flipperautomat {
                 try {
                     Thread.sleep(5000); // Alle 5 Sekunden prüfen
                     if (random.nextInt(10) < 2) { // 20% Wahrscheinlichkeit
-                        System.out.println("Die Kugel ist unerwartet verloren gegangen!");
+                        System.out.println("Die Kugel ist RANDOM verloren gegangen!");
                         kugelVerlieren(); // Kugel verlieren
                     }
                 } catch (InterruptedException e) {
@@ -107,5 +113,18 @@ public class Flipperautomat {
         if (kugelVerlustThread != null && kugelVerlustThread.isAlive()) {
             kugelVerlustThread.interrupt();
         }
+    }
+
+    public String getCurrentStyle() {
+        return currentStyle;
+    }
+
+    public void setCurrentStyle(String currentStyle) {
+        this.currentStyle = currentStyle;
+    }
+
+    public void printMessage(String message) {
+        TextStyle style = TextStyleFactory.getStyle(currentStyle);
+        System.out.println(style.format(message));
     }
 }

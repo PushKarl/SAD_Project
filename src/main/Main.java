@@ -10,6 +10,7 @@ import visitor.ResetVisitor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     private static String currentStyle = "Block"; // Standard-Stil
@@ -116,29 +117,48 @@ public class Main {
 
                 case "10":
                     if (automat.getAktuellerZustand() instanceof zustand.Ready) {
-                        TextStyle styleReady = TextStyleFactory.getStyle(currentStyle);
-                        System.out.println(styleReady.format("Press Start"));
+                        automat.printMessage("PRESS START");
                     } else if (automat.getAktuellerZustand() instanceof zustand.Playing) {
-                        TextStyle stylePlaying = TextStyleFactory.getStyle(currentStyle);
-                        System.out.println(stylePlaying.format("BALL " + automat.getAktuellerBall()));
+                        automat.printMessage("BALL " + automat.getAktuellerBall());
                     } else if (automat.getAktuellerZustand() instanceof zustand.EndState) {
-                        TextStyle styleEnd = TextStyleFactory.getStyle(currentStyle);
-                        System.out.println(styleEnd.format("GAME OVER"));
+                        automat.printMessage("GAME OVER");
                     } else {
                         System.out.println("Unbekannter Spielstatus.");
                     }
                     break;
 
                 case "11":
-                    TextStyle styleGameOver = TextStyleFactory.getStyle(currentStyle);
-                    System.out.println(styleGameOver.format("GAME OVER"));
+                    if (automat.getKredit() > 0) {
+                        automat.reduzierenKredit();
+                        TextStyle styleGameOver = TextStyleFactory.getStyle(currentStyle);
+                        System.out.println(styleGameOver.format("GAME OVER"));
+                        System.out.println("Aktueller Spielstand: " + automat.getTotalPoints()); // Gesamtpunkte anzeigen
+                        System.out.println("Verbleibender Kredit: " + automat.getKredit()); // Verbleibender Kredit anzeigen
+                        System.out.println("Bitte wählen Sie eine Aktion aus dem Menü.");
+                    } else {
+                        TextStyle styleGameOver = TextStyleFactory.getStyle(currentStyle);
+                        System.out.println(styleGameOver.format("GAME OVER"));
+                        System.out.println("Kein Kredit mehr verfügbar. Bitte werfen Sie eine neue Münze ein.");
+                    }
                     running = false;
                     break;
 
                 case "12":
-                    System.out.println("Wählen Sie einen Schriftstil: Block oder Slant");
-                    String style = scanner.nextLine();
-                    System.out.println("Schriftstil geändert zu: " + style);
+                    Set<String> allowedStyles = TextStyleFactory.getAvailableStyles();
+                    boolean validInput = false;
+
+                    while (!validInput) {
+                        System.out.println("Wählen Sie einen Schriftstil: " + String.join(", ", allowedStyles));
+                        String style = scanner.nextLine().trim();
+
+                        if (allowedStyles.contains(style)) {
+                            automat.setCurrentStyle(style);
+                            automat.printMessage("Schriftstil geändert zu: " + style);
+                            validInput = true;
+                        } else {
+                            System.out.println("Ungültige Eingabe. Erlaubte Schriftstile: " + String.join(", ", allowedStyles));
+                        }
+                    }
                     break;
 
                 case "0":
