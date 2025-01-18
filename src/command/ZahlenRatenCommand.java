@@ -8,7 +8,7 @@ public class ZahlenRatenCommand implements Command {
         Scanner scanner = new Scanner(System.in);
         int richtigeZahl = (int) (Math.random() * 3) + 1;
 
-        System.out.println("Erraten Sie eine Zahl zwischen 1 und 3:");
+        System.out.println("Erraten Sie eine Zahl von 1 bis 3:");
         int eingegebeneZahl = scanner.nextInt();
 
         if (eingegebeneZahl == richtigeZahl) {
