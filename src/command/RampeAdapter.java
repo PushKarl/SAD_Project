@@ -1,7 +1,5 @@
 package command;
 
-import elemente.Rampe;
-
 public class RampeAdapter implements Command {
     private Rampe rampe;
 
