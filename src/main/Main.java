@@ -26,7 +26,7 @@ public class Main {
         Bumper bumper = new Bumper();
         Rampe rampe = new Rampe();  // Instanziierung der Rampe
         RampeAdapter rampeAdapter = new RampeAdapter(rampe);  // Adapter für die Rampe
-        Hole hole = new Hole();  // Hole mit Rampe-Adapter
+        Hole hole = new Hole();  
 
 
         // Befehle
@@ -100,7 +100,6 @@ public class Main {
                     break;
                 case "7":
                     holeMacro.execute(); // Führt alle Aktionen des Holes aus, einschließlich ZahlenRatenCommand
-                    hole.hit(); // Optional: Kann auch direkt nach dem Makrobefehl aufgerufen werden
                     break;
                 case "8":
                     PunkteVisitor punkteVisitor = new PunkteVisitor();
