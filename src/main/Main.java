@@ -24,7 +24,10 @@ public class Main {
         Slingshot slingshot = new Slingshot();
         Target target = new Target();
         Bumper bumper = new Bumper();
-        Hole hole = new Hole();
+        Rampe rampe = new Rampe();  // Instanziierung der Rampe
+        RampeAdapter rampeAdapter = new RampeAdapter(rampe);  // Adapter für die Rampe
+        Hole hole = new Hole();  // Hole mit Rampe-Adapter
+
 
         // Befehle
         SlingshotHitCommand slingshotCommand = new SlingshotHitCommand(slingshot, automat);
@@ -32,20 +35,19 @@ public class Main {
         BumperHitCommand bumperCommand = new BumperHitCommand(bumper, automat);
         HoleHitCommand holeCommand = new HoleHitCommand(hole, automat);
         ZahlenRatenCommand zahlenRatenCommand = new ZahlenRatenCommand();
-        RampeAktivierenCommand rampeCommand = new RampeAktivierenCommand();
 
         //Makrobefehl
         MacroCommand holeMacro = new MacroCommand();
         holeMacro.addCommand(holeCommand);
         holeMacro.addCommand(zahlenRatenCommand);
-        holeMacro.addCommand(rampeCommand);
+        holeMacro.addCommand(rampeAdapter);  // Rampe über den Adapter aktivieren
 
         // Liste der Flipperelemente
         List<FlipperElement> elements = new ArrayList<>();
         elements.add(slingshot);
         elements.add(target);
         elements.add(bumper);
-        elements.add(hole);
+        elements.add(hole);  // Hole mit Rampe-Adapter hinzufügen
 
         System.out.println("""
                 Willkommen zum
@@ -97,8 +99,8 @@ public class Main {
                     bumperCommand.execute();
                     break;
                 case "7":
-                    holeMacro.execute(); // Führt alle Aktionen des Holes aus
-                    hole.hit();
+                    holeMacro.execute(); // Führt alle Aktionen des Holes aus, einschließlich ZahlenRatenCommand
+                    hole.hit(); // Optional: Kann auch direkt nach dem Makrobefehl aufgerufen werden
                     break;
                 case "8":
                     PunkteVisitor punkteVisitor = new PunkteVisitor();
