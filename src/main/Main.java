@@ -1,37 +1,52 @@
 package main;
 
+import adapter.RampeAdapter;
 import command.*;
 import display.TextStyle;
 import display.TextStyleFactory;
 import elemente.*;
+import mediator.FlipperElementMediator;
 import visitor.PunkteVisitor;
 import visitor.ResetVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
     private static String currentStyle = "Block"; // Standard-Stil
     public static void main(String[] args) {
         Flipperautomat automat = new Flipperautomat();
         Scanner scanner = new Scanner(System.in);
-        boolean running = true;
+        FlipperElementMediator mediator = new FlipperElementMediator();
+        List<FlipperElement> elements = new ArrayList<>();
+
+        // Simuliere Treffer
+        System.out.println("Simulierte Treffer:");
+        automat.simulateHits();
+
+        // Punkte berechnen
+        System.out.println("\nPunkte berechnen:");
+        automat.berechnePunkte();
+
+        // Elemente zurücksetzen
+        System.out.println("\nElemente zurücksetzen:");
+        automat.resetElements();
 
 
         // Flipperelemente
         Slingshot slingshot = new Slingshot();
-        Target target = new Target();
+        Target target1 = new Target(mediator);
+        Target target2 = new Target(mediator);
+        //Target target = new Target();
         Bumper bumper = new Bumper();
         Rampe rampe = new Rampe();  // Instanziierung der Rampe
         RampeAdapter rampeAdapter = new RampeAdapter(rampe);  // Adapter für die Rampe
-        Hole hole = new Hole();  
+        Hole hole = new Hole();
 
 
         // Befehle
         SlingshotHitCommand slingshotCommand = new SlingshotHitCommand(slingshot, automat);
-        TargetHitCommand targetCommand = new TargetHitCommand(target, automat);
+        TargetHitCommand target1Command = new TargetHitCommand(target1, automat);
+        TargetHitCommand target2Command = new TargetHitCommand(target2, automat);
         BumperHitCommand bumperCommand = new BumperHitCommand(bumper, automat);
         HoleHitCommand holeCommand = new HoleHitCommand(hole, automat);
         ZahlenRatenCommand zahlenRatenCommand = new ZahlenRatenCommand();
@@ -42,12 +57,24 @@ public class Main {
         holeMacro.addCommand(zahlenRatenCommand);
         holeMacro.addCommand(rampeAdapter);  // Rampe über den Adapter aktivieren
 
-        // Liste der Flipperelemente
-        List<FlipperElement> elements = new ArrayList<>();
+        // Registriere alle Elemente beim Mediator
+        mediator.registerElement(slingshot);
+        mediator.registerElement(target1);
+        mediator.registerElement(target2);
+        mediator.registerElement(bumper);
+        mediator.registerElement(rampe);
+        mediator.registerElement(hole);
+
+        // Überprüfung der Registrierung
+        System.out.println("Anzahl registrierter Targets: " + mediator.getTargets().size());
+
+
         elements.add(slingshot);
-        elements.add(target);
+        elements.add(target1);
+        elements.add(target2);
         elements.add(bumper);
-        elements.add(hole);  // Hole mit Rampe-Adapter hinzufügen
+        elements.add(hole);
+
 
         System.out.println("""
                 Willkommen zum
@@ -60,6 +87,10 @@ public class Main {
                     \\|__|    \\|_______|\\|__|\\|__|     \\|__|     \\|_______|\\|__|\\|__|
                 
                 """);
+
+
+        boolean running = true;
+
         while (running) {
             System.out.println("\nWählen Sie eine Aktion:");
             System.out.println("1: Münze einwerfen");
@@ -93,7 +124,8 @@ public class Main {
                     slingshotCommand.execute();
                     break;
                 case "5":
-                    targetCommand.execute();
+                    target1Command.execute();
+                    target2Command.execute();
                     break;
                 case "6":
                     bumperCommand.execute();
@@ -131,13 +163,13 @@ public class Main {
                 case "11":
                     if (automat.getKredit() > 0) {
                         automat.reduzierenKredit();
-                        TextStyle styleGameOver = TextStyleFactory.getStyle(currentStyle);
+                        TextStyle styleGameOver = TextStyleFactory.getInstance().getStyle(currentStyle);
                         System.out.println(styleGameOver.format("GAME OVER"));
                         System.out.println("Aktueller Spielstand: " + automat.getTotalPoints()); // Gesamtpunkte anzeigen
                         System.out.println("Verbleibender Kredit: " + automat.getKredit()); // Verbleibender Kredit anzeigen
                         System.out.println("Bitte wählen Sie eine Aktion aus dem Menü.");
                     } else {
-                        TextStyle styleGameOver = TextStyleFactory.getStyle(currentStyle);
+                        TextStyle styleGameOver = TextStyleFactory.getInstance().getStyle(currentStyle);
                         System.out.println(styleGameOver.format("GAME OVER"));
                         System.out.println("Kein Kredit mehr verfügbar. Bitte werfen Sie eine neue Münze ein.");
                     }
@@ -145,7 +177,7 @@ public class Main {
                     break;
 
                 case "12":
-                    Set<String> allowedStyles = TextStyleFactory.getAvailableStyles();
+                    Set<String> allowedStyles = TextStyleFactory.getInstance().getAvailableStyles();
                     boolean validInput = false;
 
                     while (!validInput) {

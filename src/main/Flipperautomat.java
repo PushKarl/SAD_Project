@@ -8,7 +8,14 @@ import zustand.EndState;
 import zustand.Ready;
 import zustand.Playing;
 
+import elemente.*;
+import visitor.*;
+import mediator.FlipperElementMediator;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
 public class Flipperautomat {
     private Zustand aktuellerZustand;
     private int kredit = 0;
@@ -16,10 +23,35 @@ public class Flipperautomat {
     private Thread kugelVerlustThread;
     private String currentStyle = "Block";
 
+    // Neue Felder für die Flipperelemente und Mediator
+    private List<FlipperElement> flipperElemente = new ArrayList<>();
+    private FlipperElementMediator mediator = new FlipperElementMediator();
 
     public Flipperautomat() {
         this.aktuellerZustand = new NoCredit();
+
+        // Initialisiere Flipper-Elemente
+        Slingshot slingshot = new Slingshot();
+        Target target1 = new Target(mediator);
+        Target target2 = new Target(mediator);
+        Bumper bumper = new Bumper();
+        Hole hole = new Hole();
+        Rampe rampe = new Rampe();
+
+        // Registriere Elemente beim Mediator
+        mediator.registerElement(target1);
+        mediator.registerElement(target2);
+        mediator.registerElement(rampe);
+
+        // Füge Elemente zur Liste hinzu
+        flipperElemente.add(slingshot);
+        flipperElemente.add(target1);
+        flipperElemente.add(target2);
+        flipperElemente.add(bumper);
+        flipperElemente.add(hole);
+        flipperElemente.add(rampe);
     }
+
     public void setZustand(Zustand zustand) {
         this.aktuellerZustand = zustand;
         if (zustand instanceof Playing) {
@@ -28,28 +60,26 @@ public class Flipperautomat {
             stopKugelVerlustThread();
         }
     }
+
     public Zustand getAktuellerZustand() {
         return aktuellerZustand;
     }
 
     public int getAktuellerBall() {
-        // Falls der Zustand Playing ist, hole die aktuelle Ballnummer
         if (aktuellerZustand instanceof Playing) {
             return ((Playing) aktuellerZustand).getAktuellerBall();
         }
-        return 0; // Kein gültiger Ball im anderen Zustand
+        return 0;
     }
 
     public void muenzeEinwerfen() {
         kredit++;
         System.out.println("Münze eingeworfen. Aktueller Kredit: " + kredit);
 
-        // Wechsel von EndState zu Ready
         if (aktuellerZustand instanceof EndState) {
             setZustand(new Ready());
             System.out.println("Wechsel in den Ready-Zustand. Drei neue Bälle bereit.");
         } else {
-            // Übergibt die Logik an den aktuellen Zustand
             aktuellerZustand.muenzeEinwerfen(this);
         }
     }
@@ -66,8 +96,10 @@ public class Flipperautomat {
         if (aktuellerZustand instanceof zustand.EndState) {
             System.out.println("Keine Kugeln mehr. Bitte werfen Sie eine Münze ein.");
             return;
-        } aktuellerZustand.kugelVerlieren(this);
+        }
+        aktuellerZustand.kugelVerlieren(this);
     }
+
     public int getKredit() {
         return kredit;
     }
@@ -77,8 +109,9 @@ public class Flipperautomat {
             kredit--;
         }
     }
+
     public void addPoints(int points) {
-        totalPoints += points; // Punkte zum Gesamtspielstand hinzufügen
+        totalPoints += points;
     }
 
     public int getTotalPoints() {
@@ -87,17 +120,17 @@ public class Flipperautomat {
 
     public void startKugelVerlustThread() {
         if (kugelVerlustThread != null && kugelVerlustThread.isAlive()) {
-            return; // Thread läuft bereits
+            return;
         }
 
         kugelVerlustThread = new Thread(() -> {
             Random random = new Random();
             while (aktuellerZustand instanceof Playing) {
                 try {
-                    Thread.sleep(5000); // Alle 5 Sekunden prüfen
-                    if (random.nextInt(10) < 2) { // 20% Wahrscheinlichkeit
+                    Thread.sleep(5000);
+                    if (random.nextInt(10) < 2) {
                         System.out.println("Die Kugel ist RANDOM verloren gegangen!");
-                        kugelVerlieren(); // Kugel verlieren
+                        kugelVerlieren();
                     }
                 } catch (InterruptedException e) {
                     System.out.println("Kugelverlust-Thread wurde unterbrochen.");
@@ -108,7 +141,6 @@ public class Flipperautomat {
         kugelVerlustThread.start();
     }
 
-    // Stoppt den Thread, wenn der Zustand nicht mehr "Playing" ist
     public void stopKugelVerlustThread() {
         if (kugelVerlustThread != null && kugelVerlustThread.isAlive()) {
             kugelVerlustThread.interrupt();
@@ -124,7 +156,34 @@ public class Flipperautomat {
     }
 
     public void printMessage(String message) {
-        TextStyle style = TextStyleFactory.getStyle(currentStyle);
+        TextStyle style = TextStyleFactory.getInstance().getStyle(currentStyle);
         System.out.println(style.format(message));
+    }
+
+    // Neue Methode: Simuliere Treffer auf alle Flipperelemente
+    public void simulateHits() {
+        System.out.println("Simuliere Treffer auf alle Flipperelemente:");
+        for (FlipperElement element : flipperElemente) {
+            element.hit();
+        }
+    }
+
+    // Neue Methode: Punkte berechnen
+    public void berechnePunkte() {
+        PunkteVisitor punkteVisitor = new PunkteVisitor();
+        for (FlipperElement element : flipperElemente) {
+            element.accept(punkteVisitor);
+        }
+        System.out.println("Gesamtpunkte: " + punkteVisitor.getTotalScore());
+        totalPoints += punkteVisitor.getTotalScore(); // Punkte zum Gesamtspielstand hinzufügen
+    }
+
+    // Neue Methode: Alle Elemente zurücksetzen
+    public void resetElements() {
+        ResetVisitor resetVisitor = new ResetVisitor();
+        for (FlipperElement element : flipperElemente) {
+            element.accept(resetVisitor);
+        }
+        System.out.println("Alle Flipperelemente wurden zurückgesetzt.");
     }
 }

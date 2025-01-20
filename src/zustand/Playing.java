@@ -28,12 +28,12 @@ public class Playing implements Zustand {
 
         if (kugelnVerloren >= maxBälle) {
             // ASCII-Ausgabe für Spielende
-            TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
+            TextStyle asciiStyle = TextStyleFactory.getInstance().getStyle("ASCII");
             System.out.println(asciiStyle.format("GAME OVER! NEUE MÜNZE EINWERFEN!"));
             automat.setZustand(new EndState());
         } else {
             // ASCII-Ausgabe für verbleibende Bälle
-            TextStyle asciiStyle = TextStyleFactory.getStyle("ASCII");
+            TextStyle asciiStyle = TextStyleFactory.getInstance().getStyle("ASCII");
             System.out.println(asciiStyle.format("Verbleibende Bälle: " + (maxBälle - kugelnVerloren)));
         }
     }

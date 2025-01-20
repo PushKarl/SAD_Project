@@ -4,7 +4,7 @@ import elemente.FlipperElement;
 import visitor.FlipperElementVisitor;
 
 import java.util.Random;
-public class Bumper extends FlipperElement {
+public class Bumper implements FlipperElement {
     private int hits = 0;
     private int points = 0;
 

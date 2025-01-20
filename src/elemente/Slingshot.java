@@ -3,7 +3,7 @@ package elemente;
 import elemente.FlipperElement;
 import visitor.FlipperElementVisitor;
 
-public class Slingshot extends FlipperElement {
+public class Slingshot implements FlipperElement {
     private int hits = 0;
 
     public void hit() {

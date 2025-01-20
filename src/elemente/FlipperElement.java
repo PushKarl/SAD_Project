@@ -2,10 +2,10 @@ package elemente;
 
 import visitor.FlipperElementVisitor;
 
-public abstract class FlipperElement {
-    public abstract void hit();
+public interface FlipperElement {
+    void hit();
 
-    public abstract void reset();
+    void reset();
 
-    public abstract void accept(FlipperElementVisitor visitor);
+    void accept(FlipperElementVisitor visitor);
 }

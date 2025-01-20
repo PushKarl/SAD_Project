@@ -4,7 +4,7 @@ import elemente.Bumper;
 import elemente.Slingshot;
 import elemente.Target;
 import elemente.Hole;
-import visitor.FlipperElementVisitor;
+import elemente.Rampe;
 
 public class PunkteVisitor extends FlipperElementVisitor {
     private int totalScore = 0;
@@ -21,16 +21,25 @@ public class PunkteVisitor extends FlipperElementVisitor {
         totalScore += pointsForTarget;
         System.out.println("Punkte von Target: " + pointsForTarget);
     }
+
     @Override
     public void visit(Bumper bumper) {
         totalScore += bumper.getPoints();
         System.out.println("Punkte von Bumper: " + bumper.getPoints());
     }
+
     @Override
     public void visit(Hole hole) {
         totalScore += hole.getHits() * 500; // 500 Punkte pro Treffer
         System.out.println("Punkte von Hole: " + (hole.getHits() * 500));
     }
+
+    @Override
+    public void visit(Rampe rampe) {
+        totalScore += 300;  // Beispiel: Feste Punkte für die Rampe
+        System.out.println("Punkte von Rampe: 300");
+    }
+
     public int getTotalScore() {
         return totalScore;
     }

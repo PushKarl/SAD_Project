@@ -1,24 +1,32 @@
 package elemente;
 
+import mediator.FlipperElementMediator;
 import visitor.FlipperElementVisitor;
 
-import java.util.Random;
-
-public class Target extends FlipperElement {
+public class Target implements FlipperElement {
     private boolean isHit = false;
     private int hits = 0;
+    private FlipperElementMediator mediator;
 
+    public Target(FlipperElementMediator mediator) {
+        this.mediator = mediator;
+    }
+
+    @Override
     public void hit() {
-        Random random = new Random();
-        if (random.nextBoolean()) {
+        hits++;
+        System.out.println("Target wurde getroffen! Treffer: " + hits);
+        if (!isHit) {
             isHit = true;
-            hits++;
-            System.out.println("Target wurde getroffen! Treffer: " + hits);
-        } else {
-            System.out.println("Target wurde nicht getroffen.");
+        }
+        if (mediator != null) {
+            mediator.notify(this, "hit");
         }
     }
 
+
+
+    @Override
     public void reset() {
         isHit = false;
         hits = 0;

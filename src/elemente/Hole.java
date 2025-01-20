@@ -2,7 +2,7 @@ package elemente;
 
 import visitor.FlipperElementVisitor;
 
-public class Hole extends FlipperElement {
+public class Hole implements FlipperElement {
     private int hits = 0;
 
     @Override

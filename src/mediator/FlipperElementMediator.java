@@ -1,41 +1,65 @@
 package mediator;
 
-import elemente.FlipperElement;
 import elemente.Rampe;
 import elemente.Target;
-import java.util.ArrayList;
-import java.util.List;
+import elemente.FlipperElement;
+import java.util.HashSet;
+import java.util.Set;
 
-public class FlipperElementMediator implements FlipperMediator {
-    private List<FlipperElement> elements = new ArrayList<>();
-    private List<Target> targetGroup = new ArrayList<>();
+public class FlipperElementMediator {
+    private Set<Target> targets = new HashSet<>();
     private Rampe rampe;
 
-    @Override
+    public Set<Target> getTargets() {
+        return targets;
+    }
+
+
+    // Registrierung von Targets
+    public void registerTarget(Target target) {
+        targets.add(target);
+        System.out.println("Target registriert: " + target);
+    }
+
+
+    // Registrierung der Rampe
+    public void registerRampe(Rampe rampe) {
+        this.rampe = rampe;
+    }
+
+    // Allgemeine Registrierungsmethode
     public void registerElement(FlipperElement element) {
-        elements.add(element);
         if (element instanceof Target) {
-            targetGroup.add((Target) element);
-        }
-        if (element instanceof Rampe) {
-            rampe = (Rampe) element;
+            registerTarget((Target) element);
+        } else if (element instanceof Rampe) {
+            registerRampe((Rampe) element);
+        } else {
+            System.out.println("Element " + element.getClass().getSimpleName() + " wird nicht unterstützt.");
         }
     }
 
-    @Override
-    public void notifyElement(FlipperElement element) {
-        // Wenn ein Target getroffen wird, prüfen wir, ob alle Targets getroffen wurden
-        if (element instanceof Target) {
-            checkTargetGroupStatus();
-        }
+    // Ereignisbehandlung
+    public void notify(FlipperElement sender, String event) {
+        System.out.println("Mediator: Event '" + event + "' von " + sender.getClass().getSimpleName() + " empfangen.");
 
+        if (event.equals("hit") && targets.contains(sender)) {
+            System.out.println(sender.getClass().getSimpleName() + " wurde getroffen.");
+            checkAllTargetsHit();
+        }
     }
 
-    private void checkTargetGroupStatus() {
-        boolean allTargetsHit = targetGroup.stream().allMatch(Target::isHit);
+    // Überprüft, ob alle Targets getroffen wurden
+    private void checkAllTargetsHit() {
+        boolean allHit = true;
+        for (Target target : targets) {
+            if (!target.isHit()) {
+                allHit = false;
+                break;
+            }
+        }
 
-        if (allTargetsHit) {
-            // Wenn alle Targets getroffen wurden, aktivieren wir die Rampe
+        if (allHit) {
+            System.out.println("Alle Targets wurden getroffen! Die Rampe wird aktiviert.");
             if (rampe != null) {
                 rampe.activate();
             }
