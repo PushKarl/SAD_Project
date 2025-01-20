@@ -1,6 +1,5 @@
 package elemente;
 
-import elemente.FlipperElement;
 import visitor.FlipperElementVisitor;
 
 import java.util.Random;
@@ -36,6 +35,6 @@ public class Target extends FlipperElement {
     }
 
     public int getHits() {
-      return hits;
-    };
+        return hits;
+    }
 }
